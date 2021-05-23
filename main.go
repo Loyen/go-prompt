@@ -8,12 +8,7 @@ import (
 )
 
 func main() {
-	if len(os.Args) <= 1 {
-		fmt.Println("No Path given.")
-		return
-	}
-
-	path := string(os.Args[1])
+	path := os.Getenv("PWD")
 
 	location := modules.Location{}
 	location.SetPath(path)
