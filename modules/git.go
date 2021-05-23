@@ -2,6 +2,7 @@ package modules
 
 import (
 	"bufio"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -70,34 +71,66 @@ func (git *Git) GetOutput() string {
 
 	status := git.GetStatus()
 	if status.Addition > 0 {
-		statuses = append(statuses, "+"+strconv.Itoa(status.Addition))
+		statuses = append(
+			statuses,
+			formatValue("ADDITION", "+", strconv.Itoa(status.Addition)),
+		)
 	}
 
 	if status.Deletion > 0 {
-		statuses = append(statuses, "-"+strconv.Itoa(status.Deletion))
+		statuses = append(
+			statuses,
+			formatValue("DELETION", "-", strconv.Itoa(status.Deletion)),
+		)
 	}
 
 	if status.Untracked > 0 {
-		statuses = append(statuses, "?"+strconv.Itoa(status.Untracked))
+		statuses = append(
+			statuses,
+			formatValue("UNTRACKED", "?", strconv.Itoa(status.Untracked)),
+		)
 	}
 
 	if status.Staged > 0 {
-		statuses = append(statuses, "^"+strconv.Itoa(status.Staged))
+		statuses = append(
+			statuses,
+			formatValue("STAGED", "^", strconv.Itoa(status.Staged)),
+		)
 	}
 
 	if status.Stashed > 0 {
-		statuses = append(statuses, "="+strconv.Itoa(status.Stashed))
+		statuses = append(
+			statuses,
+			formatValue("STASHED", "=", strconv.Itoa(status.Stashed)),
+		)
 	}
 
 	if status.Conflict > 0 {
-		statuses = append(statuses, "*"+strconv.Itoa(status.Conflict))
+		statuses = append(
+			statuses,
+			formatValue("CONFLICT", "*", strconv.Itoa(status.Conflict)),
+		)
 	}
 
-	output := git.GetCurrentBranchName()
+	output := formatValue("BRANCH", "", git.GetCurrentBranchName())
 
 	if len(statuses) > 0 {
 		output += " " + strings.Join(statuses, " ")
 	}
 
 	return output
+}
+
+func formatValue(statusName string, defaultStatusSymbol string, statusValue string) string {
+	return getEnvOrDefault("GO_PROMPT_GIT_"+statusName, defaultStatusSymbol) + statusValue + getEnvOrDefault("GO_PROMPT_DEFAULT", "")
+}
+
+func getEnvOrDefault(key string, defaultValue string) string {
+	value := os.Getenv(key)
+
+	if value != "" {
+		return value
+	}
+
+	return defaultValue
 }
