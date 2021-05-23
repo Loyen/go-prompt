@@ -13,8 +13,6 @@ func main() {
 	location := modules.Location{}
 	location.SetPath(path)
 
-	locationOutput := location.GetOutput()
-
 	gitOutput := ""
 	gitRepository := modules.Git{}
 	gitRepository.SetPath(path)
@@ -23,9 +21,11 @@ func main() {
 		gitOutput = gitRepository.GetOutput()
 	}
 
+	user := modules.User{}
+
 	fmt.Printf("%s %s\n%s",
 		gitOutput,
-		locationOutput,
-		"$ ",
+		location.GetOutput(),
+		user.GetOutput(),
 	)
 }

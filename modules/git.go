@@ -73,46 +73,46 @@ func (git *Git) GetOutput() string {
 	if status.Addition > 0 {
 		statuses = append(
 			statuses,
-			formatValue("ADDITION", "+", strconv.Itoa(status.Addition)),
+			formatGitValue("ADDITION", "+", strconv.Itoa(status.Addition)),
 		)
 	}
 
 	if status.Deletion > 0 {
 		statuses = append(
 			statuses,
-			formatValue("DELETION", "-", strconv.Itoa(status.Deletion)),
+			formatGitValue("DELETION", "-", strconv.Itoa(status.Deletion)),
 		)
 	}
 
 	if status.Untracked > 0 {
 		statuses = append(
 			statuses,
-			formatValue("UNTRACKED", "?", strconv.Itoa(status.Untracked)),
+			formatGitValue("UNTRACKED", "?", strconv.Itoa(status.Untracked)),
 		)
 	}
 
 	if status.Staged > 0 {
 		statuses = append(
 			statuses,
-			formatValue("STAGED", "^", strconv.Itoa(status.Staged)),
+			formatGitValue("STAGED", "^", strconv.Itoa(status.Staged)),
 		)
 	}
 
 	if status.Stashed > 0 {
 		statuses = append(
 			statuses,
-			formatValue("STASHED", "=", strconv.Itoa(status.Stashed)),
+			formatGitValue("STASHED", "=", strconv.Itoa(status.Stashed)),
 		)
 	}
 
 	if status.Conflict > 0 {
 		statuses = append(
 			statuses,
-			formatValue("CONFLICT", "*", strconv.Itoa(status.Conflict)),
+			formatGitValue("CONFLICT", "*", strconv.Itoa(status.Conflict)),
 		)
 	}
 
-	output := formatValue("BRANCH", "", git.GetCurrentBranchName())
+	output := formatGitValue("BRANCH", "", git.GetCurrentBranchName())
 
 	if len(statuses) > 0 {
 		output += " " + strings.Join(statuses, " ")
@@ -121,7 +121,7 @@ func (git *Git) GetOutput() string {
 	return output
 }
 
-func formatValue(statusName string, defaultStatusSymbol string, statusValue string) string {
+func formatGitValue(statusName string, defaultStatusSymbol string, statusValue string) string {
 	return getEnvOrDefault("GO_PROMPT_GIT_"+statusName, defaultStatusSymbol) + statusValue + getEnvOrDefault("GO_PROMPT_DEFAULT", "")
 }
 
