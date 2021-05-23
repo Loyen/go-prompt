@@ -66,32 +66,37 @@ func (git *Git) GetStatus() GitStatus {
 }
 
 func (git *Git) GetOutput() string {
-	branch := git.GetCurrentBranchName()
-	status := git.GetStatus()
+	statuses := []string{}
 
-	output := branch
+	status := git.GetStatus()
 	if status.Addition > 0 {
-		output += " +" + strconv.Itoa(status.Addition)
+		statuses = append(statuses, "+"+strconv.Itoa(status.Addition))
 	}
 
 	if status.Deletion > 0 {
-		output += " -" + strconv.Itoa(status.Deletion)
+		statuses = append(statuses, "-"+strconv.Itoa(status.Deletion))
 	}
 
 	if status.Untracked > 0 {
-		output += " ?" + strconv.Itoa(status.Untracked)
+		statuses = append(statuses, "?"+strconv.Itoa(status.Untracked))
 	}
 
 	if status.Staged > 0 {
-		output += " ^" + strconv.Itoa(status.Staged)
+		statuses = append(statuses, "^"+strconv.Itoa(status.Staged))
 	}
 
 	if status.Stashed > 0 {
-		output += " =" + strconv.Itoa(status.Stashed)
+		statuses = append(statuses, "="+strconv.Itoa(status.Stashed))
 	}
 
 	if status.Conflict > 0 {
-		output += " *" + strconv.Itoa(status.Conflict)
+		statuses = append(statuses, "*"+strconv.Itoa(status.Conflict))
+	}
+
+	output := git.GetCurrentBranchName()
+
+	if len(statuses) > 0 {
+		output += " " + strings.Join(statuses, " ")
 	}
 
 	return output
