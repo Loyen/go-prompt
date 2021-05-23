@@ -3,6 +3,7 @@ package modules
 import (
 	"bufio"
 	"os/exec"
+	"strconv"
 	"strings"
 )
 
@@ -62,4 +63,36 @@ func (git *Git) GetStatus() GitStatus {
 	}
 
 	return status
+}
+
+func (git *Git) GetOutput() string {
+	branch := git.GetCurrentBranchName()
+	status := git.GetStatus()
+
+	output := branch
+	if status.Addition > 0 {
+		output += " +" + strconv.Itoa(status.Addition)
+	}
+
+	if status.Deletion > 0 {
+		output += " -" + strconv.Itoa(status.Deletion)
+	}
+
+	if status.Untracked > 0 {
+		output += " ?" + strconv.Itoa(status.Untracked)
+	}
+
+	if status.Staged > 0 {
+		output += " ^" + strconv.Itoa(status.Staged)
+	}
+
+	if status.Stashed > 0 {
+		output += " =" + strconv.Itoa(status.Stashed)
+	}
+
+	if status.Conflict > 0 {
+		output += " *" + strconv.Itoa(status.Conflict)
+	}
+
+	return output
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	git "github.com/loyen/go-prompt/modules"
+	modules "github.com/loyen/go-prompt/modules"
 )
 
 func main() {
@@ -15,22 +15,22 @@ func main() {
 
 	path := string(os.Args[1])
 
-	gitRepository := git.Git{}
+	location := modules.Location{}
+	location.SetPath(path)
+
+	locationOutput := location.GetOutput()
+
+	gitOutput := ""
+	gitRepository := modules.Git{}
 	gitRepository.SetPath(path)
-	gitInfo := ""
 
 	if gitRepository.IsGitRepository() {
-		gitStatus := gitRepository.GetStatus()
-		gitInfo = fmt.Sprintf("%s +%d -%d ?%d ^%d !%d =%d",
-			gitRepository.GetCurrentBranchName(),
-			gitStatus.Addition,
-			gitStatus.Deletion,
-			gitStatus.Untracked,
-			gitStatus.Staged,
-			gitStatus.Conflict,
-			gitStatus.Stashed,
-		)
+		gitOutput = gitRepository.GetOutput()
 	}
 
-	fmt.Printf("%s\n%s", gitInfo, "$ ")
+	fmt.Printf("%s %s\n%s",
+		gitOutput,
+		locationOutput,
+		"$ ",
+	)
 }
