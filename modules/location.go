@@ -20,7 +20,7 @@ func (location *Location) processPath() string {
 		outputPath = strings.Replace(outputPath, userHome, "~/", 1)
 	}
 
-	return getEnvOrDefault("GO_PROMPT_LOCATION", "") + outputPath + getEnvOrDefault("GO_PROMPT_DEFAULT", "")
+	return formatValue("LOCATION", outputPath)
 }
 
 func (location *Location) GetOutput() string {

@@ -23,7 +23,7 @@ func main() {
 
 	user := modules.User{}
 
-	fmt.Printf("%s %s\n%s",
+	fmt.Printf("%s%s%s",
 		gitOutput,
 		location.GetOutput(),
 		user.GetOutput(),

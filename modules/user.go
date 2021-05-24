@@ -5,20 +5,14 @@ import "os"
 type User struct {
 }
 
-func formatUserValue(userType string, value string) string {
-	return os.Getenv("GO_PROMPT_USER_"+userType) + value + os.Getenv("GO_PROMPT_DEFAULT")
-}
-
 func (user *User) GetOutput() string {
-	userName := os.Getenv("USER")
+	userType := ""
 
-	prompt := ""
-
-	if userName == "root" {
-		prompt = formatUserValue("ROOT", "# ")
+	if os.Getenv("USER") == "root" {
+		userType = "ROOT"
 	} else {
-		prompt = formatUserValue("DEFAULT", "$ ")
+		userType = "DEFAULT"
 	}
 
-	return prompt
+	return formatValue("USER", os.Getenv("GO_PROMPT_USER_"+userType))
 }
