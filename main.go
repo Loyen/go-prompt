@@ -15,20 +15,20 @@ func main() {
 	timeModule := modules.TimeModule{}
 	parts = append(parts, timeModule.GetOutput())
 
-	gitRepository := modules.Git{}
-	gitRepository.SetPath(path)
+	gitModule := modules.GitModule{}
+	gitModule.SetPath(path)
 
-	if gitRepository.IsGitRepository() {
-		parts = append(parts, gitRepository.GetOutput())
+	if gitModule.IsGitRepository() {
+		parts = append(parts, gitModule.GetOutput())
 	}
 
-	location := modules.Location{}
-	location.SetPath(path)
+	locationModule := modules.LocationModule{}
+	locationModule.SetPath(path)
 
-	parts = append(parts, location.GetOutput())
+	parts = append(parts, locationModule.GetOutput())
 
-	user := modules.User{}
-	parts = append(parts, user.GetOutput())
+	userModule := modules.UserModule{}
+	parts = append(parts, userModule.GetOutput())
 
 	fmt.Print(strings.Join(parts, os.Getenv("GO_PROMPT_SEPARATOR")))
 }

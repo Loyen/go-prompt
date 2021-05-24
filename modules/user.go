@@ -4,10 +4,10 @@ import (
 	"os"
 )
 
-type User struct {
+type UserModule struct {
 }
 
-func (user *User) GetOutput() string {
+func (userModule *UserModule) GetOutput() string {
 	userType := ""
 
 	if os.Getenv("USER") == "root" {

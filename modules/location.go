@@ -5,16 +5,16 @@ import (
 	"strings"
 )
 
-type Location struct {
+type LocationModule struct {
 	Path string
 }
 
-func (location *Location) SetPath(path string) {
-	location.Path = path
+func (locationModule *LocationModule) SetPath(path string) {
+	locationModule.Path = path
 }
 
-func (location *Location) processPath() string {
-	outputPath := location.Path
+func (locationModule *LocationModule) processPath() string {
+	outputPath := locationModule.Path
 	userHome := "/home/" + os.Getenv("USER") + "/"
 	if strings.HasPrefix(outputPath, userHome) {
 		outputPath = strings.Replace(outputPath, userHome, "~/", 1)
@@ -23,6 +23,6 @@ func (location *Location) processPath() string {
 	return formatValue("LOCATION", outputPath)
 }
 
-func (location *Location) GetOutput() string {
-	return location.processPath()
+func (locationModule *LocationModule) GetOutput() string {
+	return locationModule.processPath()
 }

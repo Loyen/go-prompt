@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type Git struct {
+type GitModule struct {
 	Path string
 }
 
@@ -20,28 +20,28 @@ type GitStatus struct {
 	Conflict  int
 }
 
-func (git *Git) SetPath(path string) {
+func (gitModule *GitModule) SetPath(path string) {
 	gitPathCmd := exec.Command("git", "-C", path, "rev-parse", "--show-toplevel")
 	gitPathOutput, err := gitPathCmd.Output()
 
 	if err == nil {
-		git.Path = strings.Trim(string(gitPathOutput), "\n ")
+		gitModule.Path = strings.Trim(string(gitPathOutput), "\n ")
 	}
 }
 
-func (git *Git) IsGitRepository() bool {
-	return git.Path != ""
+func (gitModule *GitModule) IsGitRepository() bool {
+	return gitModule.Path != ""
 }
 
-func (git *Git) GetCurrentBranchName() string {
-	gitBranchCmd := exec.Command("git", "-C", git.Path, "rev-parse", "--abbrev-ref", "HEAD")
+func (gitModule *GitModule) GetCurrentBranchName() string {
+	gitBranchCmd := exec.Command("git", "-C", gitModule.Path, "rev-parse", "--abbrev-ref", "HEAD")
 	gitBranchOutput, _ := gitBranchCmd.Output()
 
 	return strings.Trim(string(gitBranchOutput), "\n ")
 }
 
-func (git *Git) GetStatus() GitStatus {
-	gitStatusCmd := exec.Command("git", "-C", git.Path, "status", "--porcelain")
+func (gitModule *GitModule) GetStatus() GitStatus {
+	gitStatusCmd := exec.Command("git", "-C", gitModule.Path, "status", "--porcelain")
 	gitStatusOutput, _ := gitStatusCmd.Output()
 
 	scanner := bufio.NewScanner(strings.NewReader(string(gitStatusOutput)))
@@ -65,10 +65,10 @@ func (git *Git) GetStatus() GitStatus {
 	return status
 }
 
-func (git *Git) GetOutput() string {
+func (gitModule *GitModule) GetOutput() string {
 	statuses := []string{}
 
-	status := git.GetStatus()
+	status := gitModule.GetStatus()
 	if status.Addition > 0 {
 		statuses = append(
 			statuses,
@@ -111,7 +111,7 @@ func (git *Git) GetOutput() string {
 		)
 	}
 
-	output := formatValue("GIT_BRANCH", git.GetCurrentBranchName())
+	output := formatValue("GIT_BRANCH", gitModule.GetCurrentBranchName())
 
 	if len(statuses) > 0 {
 		output += " " + strings.Join(statuses, " ")
