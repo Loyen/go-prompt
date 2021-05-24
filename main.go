@@ -3,29 +3,29 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	modules "github.com/loyen/go-prompt/modules"
 )
 
 func main() {
 	path := os.Getenv("PWD")
+	parts := []string{}
 
-	location := modules.Location{}
-	location.SetPath(path)
-
-	gitOutput := ""
 	gitRepository := modules.Git{}
 	gitRepository.SetPath(path)
 
 	if gitRepository.IsGitRepository() {
-		gitOutput = gitRepository.GetOutput()
+		parts = append(parts, gitRepository.GetOutput())
 	}
 
-	user := modules.User{}
+	location := modules.Location{}
+	location.SetPath(path)
 
-	fmt.Printf("%s%s%s",
-		gitOutput,
-		location.GetOutput(),
-		user.GetOutput(),
-	)
+	parts = append(parts, location.GetOutput())
+
+	user := modules.User{}
+	parts = append(parts, user.GetOutput())
+
+	fmt.Print(strings.Join(parts, os.Getenv("GO_PROMPT_SEPARATOR")))
 }
