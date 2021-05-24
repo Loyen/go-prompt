@@ -1,6 +1,8 @@
 package modules
 
-import "os"
+import (
+	"os"
+)
 
 type User struct {
 }
