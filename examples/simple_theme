@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+export GO_PROMPT_GIT_BRANCH=""
+export GO_PROMPT_GIT_ADDITION="+"
+export GO_PROMPT_GIT_CONFLICT="*"
+export GO_PROMPT_GIT_DELETION="-"
+export GO_PROMPT_GIT_STAGED="^"
+export GO_PROMPT_GIT_STASHED="="
+export GO_PROMPT_GIT_UNTRACKED="?"
+
+export GO_PROMPT_TIME=""
+export GO_PROMPT_LOCATION=""
+
+export GO_PROMPT_USER="\n"
+export GO_PROMPT_USER_ROOT="# "
+export GO_PROMPT_USER_DEFAULT="$ "
+
+export GO_PROMPT_SEPARATOR=" "
+export GO_PROMPT_DEFAULT=""
+
+PROMPT_COMMAND='PS1="$($(go env GOPATH)/bin/go-prompt)"'
