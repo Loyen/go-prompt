@@ -12,6 +12,9 @@ func main() {
 	path := os.Getenv("PWD")
 	parts := []string{}
 
+	timeModule := modules.TimeModule{}
+	parts = append(parts, timeModule.GetOutput())
+
 	gitRepository := modules.Git{}
 	gitRepository.SetPath(path)
 
