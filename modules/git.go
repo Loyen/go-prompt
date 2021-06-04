@@ -41,13 +41,11 @@ func (gitModule *GitModule) GetCurrentBranchName() string {
 }
 
 func (gitModule *GitModule) GetStatus() GitStatus {
-	gitStatusCmd := exec.Command("git", "-C", gitModule.Path, "status", "--porcelain")
-	gitStatusOutput, _ := gitStatusCmd.Output()
-
-	scanner := bufio.NewScanner(strings.NewReader(string(gitStatusOutput)))
-
 	status := GitStatus{}
 
+	gitStatusCmd := exec.Command("git", "-C", gitModule.Path, "status", "--porcelain")
+	gitStatusOutput, _ := gitStatusCmd.Output()
+	scanner := bufio.NewScanner(strings.NewReader(string(gitStatusOutput)))
 	for scanner.Scan() {
 		if strings.HasPrefix(scanner.Text(), " M") {
 			status.Addition++
@@ -60,6 +58,13 @@ func (gitModule *GitModule) GetStatus() GitStatus {
 		} else {
 			status.Staged++
 		}
+	}
+
+	gitStashCmd := exec.Command("git", "-C", gitModule.Path, "stash", "list")
+	gitStashOutput, _ := gitStashCmd.Output()
+	scanner = bufio.NewScanner(strings.NewReader(string(gitStashOutput)))
+	for scanner.Scan() {
+		status.Stashed++
 	}
 
 	return status
